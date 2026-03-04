@@ -11,10 +11,10 @@ function TaskComponent ({taskArr}) {
         <div>
             <h3>
                 These are the tasks that need to be done:
-                <ul>
-                    {taskArr.map((task, index) => <li key={index}>{task} - {index + 1}</li>)}
-                </ul>
             </h3>
+            <ul>
+                {taskArr.map((task, index) => <li key={index}>{task} - {index + 1}</li>)}
+            </ul>
             <h3>
                 And you will start with: {task}
             </h3>

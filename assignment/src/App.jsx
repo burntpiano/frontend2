@@ -43,7 +43,7 @@ function App() {
             <Greeting username={"Alice"} />
             <Greeting username={"Bob"} />
             <TaskForm taskArr={taskArr} />
-            <UserInfo />
+            <UserInfo handleClick={handleClick} />
             <TaskComponent taskArr={taskArr} />
             <ClickCounter />
         </div>
