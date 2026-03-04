@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function TaskForm({ addTask }) {
+function TaskForm() {
     const [taskName, setTaskName] = useState("");
 
     function submitTask(e) {
@@ -13,6 +13,7 @@ function TaskForm({ addTask }) {
         <form onSubmit={submitTask}>
             <input
                 type="text"
+                placeholder="Enter a new task"
                 value={taskName}
                 onChange={(e) => setTaskName(e.target.value)}
             />

@@ -1,3 +1,4 @@
+import { useState } from "react";
 function TaskComponent ({taskArr}) {
     function getRandomTask() {
         const randomIndex = Math.floor(Math.random() * taskArr.length);

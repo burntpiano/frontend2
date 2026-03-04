@@ -1,33 +1,32 @@
 import './App.css'
-import {useState} from 'react'
-import {ClickCounter, Greeting, TaskForm, UserInfo} from './components';
+import {ClickCounter, Greeting, TaskForm, UserInfo, TaskComponent} from './components';
 
 function handleClick() {
         alert("Hah! Spooked ya!");
     }
 
-function TaskComponent ({taskArr}) {
-    function getRandomTask() {
-        const randomIndex = Math.floor(Math.random() * taskArr.length);
-        return taskArr[randomIndex];
-    }
+// function TaskComponent ({taskArr}) {
+//     function getRandomTask() {
+//         const randomIndex = Math.floor(Math.random() * taskArr.length);
+//         return taskArr[randomIndex];
+//     }
     
-    const [task] = useState(getRandomTask());
+//     const [task] = useState(getRandomTask());
 
-    return (
-        <div>
-            <h3>
-                These are the tasks that need to be done:
-                <ul>
-                    {taskArr.map((task, index) => <li key={index}>{task} - {index + 1}</li>)}
-                </ul>
-            </h3>
-            <h3>
-                And you will start with: {task}
-            </h3>
-        </div>
-    )
-}
+//     return (
+//         <div>
+//             <h3>
+//                 These are the tasks that need to be done:
+//                 <ul>
+//                     {taskArr.map((task, index) => <li key={index}>{task} - {index + 1}</li>)}
+//                 </ul>
+//             </h3>
+//             <h3>
+//                 And you will start with: {task}
+//             </h3>
+//         </div>
+//     )
+// }
 
 const taskArr = [
 "Do the dishes",
@@ -43,8 +42,8 @@ function App() {
         <div>
             <Greeting username={"Alice"} />
             <Greeting username={"Bob"} />
-            <TaskForm />
-            <UserInfo handleClick={handleClick} />
+            <TaskForm taskArr={taskArr} />
+            <UserInfo />
             <TaskComponent taskArr={taskArr} />
             <ClickCounter />
         </div>
