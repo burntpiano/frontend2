@@ -1,25 +1,44 @@
-import { useState } from "react";
-function TaskComponent ({taskArr}) {
-    function getRandomTask() {
-        const randomIndex = Math.floor(Math.random() * taskArr.length);
-        return taskArr[randomIndex];
+import { useEffect, useState } from 'react';
+import { collection, query, where, onSnapshot, deleteDoc, doc } from 'firebase/firestore';
+import { db } from '../../firebase';
+import { useAuth } from '../../contexts/AuthContext';
+
+function TaskComponent() {
+    const [tasks, setTasks] = useState([]);
+    const { user } = useAuth();
+
+    useEffect(() => {
+        if (!user) return;
+        const q = query(collection(db, 'tasks'), where('userId', '==', user.uid));
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            setTasks(snapshot.docs.map((d) => ({ id: d.id, ...d.data() })));
+        });
+        return unsubscribe;
+    }, [user]);
+
+    async function deleteTask(id) {
+        if (!window.confirm('Are you sure you want to delete this task?')) return;
+        await deleteDoc(doc(db, 'tasks', id));
     }
-    
-    const [task] = useState(getRandomTask());
 
     return (
         <div>
-            <h3>
-                These are the tasks that need to be done:
-            </h3>
-            <ul>
-                {taskArr.map((task, index) => <li key={index}>{task} - {index + 1}</li>)}
-            </ul>
-            <h3>
-                And you will start with: {task}
-            </h3>
+            <h3>Your Tasks:</h3>
+            {tasks.length === 0 ? (
+                <p>No tasks yet. Add one above!</p>
+            ) : (
+                <ul>
+                    {tasks.map((task) => (
+                        <li key={task.id}>
+                            <strong>{task.taskName}</strong>
+                            {task.taskDescription && <span> — {task.taskDescription}</span>}
+                            <button onClick={() => deleteTask(task.id)}>Delete</button>
+                        </li>
+                    ))}
+                </ul>
+            )}
         </div>
-    )
+    );
 }
 
 export default TaskComponent;

@@ -1,30 +1,47 @@
-import './App.css'
-import {ClickCounter, Greeting, TaskForm, UserInfo, TaskComponent} from './components';
+import './App.css';
+import { useState } from 'react';
+import { signOut } from 'firebase/auth';
+import { auth } from './firebase';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import Login from './components/auth/Login';
+import SignUp from './components/auth/SignUp';
+import { TaskForm, TaskComponent } from './components';
 
-function handleClick() {
-        alert("Hah! Spooked ya!");
+function Dashboard() {
+    const { user } = useAuth();
+
+    async function handleLogout() {
+        await signOut(auth);
     }
 
-const taskArr = [
-"Do the dishes",
-"Take out the trash",
-"Mow the lawn",
-"Clean the bathroom",
-"Vacuum the house"
-];
+    return (
+        <div>
+            <h2>Welcome, {user.email}!</h2>
+            <button onClick={handleLogout}>Logout</button>
+            <TaskForm />
+            <TaskComponent />
+        </div>
+    );
+}
 
+function AuthPage() {
+    const [showLogin, setShowLogin] = useState(true);
+    return showLogin
+        ? <Login onSwitch={() => setShowLogin(false)} />
+        : <SignUp onSwitch={() => setShowLogin(true)} />;
+}
+
+function AppContent() {
+    const { user } = useAuth();
+    return user ? <Dashboard /> : <AuthPage />;
+}
 
 function App() {
     return (
-        <div>
-            <Greeting username={"Alice"} />
-            <Greeting username={"Bob"} />
-            <TaskForm taskArr={taskArr} />
-            <UserInfo handleClick={handleClick} />
-            <TaskComponent taskArr={taskArr} />
-            <ClickCounter />
-        </div>
-    )
+        <AuthProvider>
+            <AppContent />
+        </AuthProvider>
+    );
 }
 
-export default App
+export default App;
